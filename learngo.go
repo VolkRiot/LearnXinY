@@ -112,6 +112,28 @@ func learnTypes() {
   // Output of course counts as using a variable.
   fmt.Println(s, c, a4, s3, d2, m)
 
+  learnFlowControl()
 
+  // It is possible, unlike in many other languages for functions in go
+  // to have named return values.
+  // Assigning a name to the type being returned in the function declaration line
+  // allows us to easily return from multiple points in a function as well as to
+  // only use the return keyword, without anything further.
+}
 
+func learnNamedReturns(x, y int) (z int) {
+  z = x * y
+  return // z is implicit here, because we named it earlier.
+}
+
+// Go is fully garbage collected. It has pointers but no pointer arithmetic.
+// You can make a mistake with a nil pointer, but not by incrementing a pointer.
+
+func learnMemory() (p, q *int) {
+  // Named return values p and q have type pointer to int.
+  p = new(int) // Built-in function new allocates memory.
+  s := make([]int, 20) // Allocate 20 ints as a single block of memory.
+  s[3] = 7  // Assign one of them.
+  r := -2   // Declare another local variable.
+  return &s[3], &r // & takes the address of an object.
 }
