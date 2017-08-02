@@ -137,3 +137,39 @@ func learnMemory() (p, q *int) {
   r := -2   // Declare another local variable.
   return &s[3], &r // & takes the address of an object.
 }
+
+func expensiveComputation() float64 {
+  return m.Exp(10)
+}
+
+func learnFlowControl() {
+  // If statements require brace brackets, and do not require parentheses.
+  if true {
+    fmt.Println("told ya so")
+  }
+
+  if false {
+    // example
+  } else {
+    // another
+  }
+
+  x := 42.0
+  switch x {
+    case 0:
+    case 1:
+    case 42:
+      // Cases don't "fall through".
+      /*
+      There is a `fallthrough` keyword however, see:
+        https://github.com/golang/go/wiki/Switch#fall-through
+      */
+    case 43:
+      // Wont reach This
+    default:
+      // Optional case
+  }
+
+  
+
+}
