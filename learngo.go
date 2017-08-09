@@ -67,7 +67,7 @@ func learnTypes() {
   n := byte('\n')
 
   // Arrays have size fixed at compile time.
-  var a4 = [4]int // an array of 4 integers intialized to all 0
+  var a4 [4]int // an array of 4 integers intialized to all 0
   a5 := [...]int{3, 1, 5, 10, 100} // An array initialized with a fixed size of five
     // elements, with values 3, 1, 5, 10, and 100.
 
@@ -342,7 +342,7 @@ func learnConcurrency() {
   cs := make(chan string) // Another channel, this one handles strings.
   ccs := make(chan chan string) // A channel of string channels.
   go func() { c <- 84 }() // Start a new goroutine just to send a value.
-  go func() { c <- "wordy" }() // Again, for cs this time.
+  go func() { cs <- "wordy" }() // Again, for cs this time.
   // Select has syntax like a switch statement but each case involves
   // a channel operation. It selects a case at random out of the cases
   // that are ready to communicate.
@@ -358,4 +358,30 @@ func learnConcurrency() {
   // goroutines started above has completed, the other will remain blocked.
   learnWebProgramming() // Go does it. You want to do it too.
 
+}
+
+// A single function from package http starts a web server.
+func learnWebProgramming() {
+  // First parameter of ListenAndServe is TCP address to listen to.
+  // Second parameter is an interface, specifically http.Handler.
+  go func() {
+    err := http.ListenAndServe(":8080", pair{})
+    fmt.Println(err) // dont ignore errors
+  }()
+
+  requestServer()
+}
+
+// Make pair an http.Handler by implementing its only method, ServeHTTP.
+func (p pair) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+  // Serve data with a method of http.ResponseWriter.
+  w.Write([]byte("I learned some Go in Y mins"))
+}
+
+func requestServer() {
+  resp, err := http.Get("http://localhost:8080")
+  fmt.Println(err)
+  defer resp.Body.Close()
+  body, err := ioutil.ReadAll(resp.Body)
+  fmt.Printf("\nWebserver said: `%s`", string(body))
 }
