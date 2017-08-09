@@ -271,3 +271,56 @@ func (p pair) String() string {
   // Dot syntax references fields of p.
   return fmt.Sprintf("(%d, %d)", p.x, p.y)
 }
+
+func learnInterfaces() {
+  // Brace syntax is a "struct literal". It evaluates to an initialized
+  // struct. The := syntax declares and initializes p to this struct.
+  p := pair{3, 4}
+  fmt.Println(p.String()) // Call String method of p, of type pair.
+  var i Stringer // Declare i of interface type Stringer.
+  i = p
+  // Call String method of i, of type Stringer. Output same as above.
+  fmt.Println(i.String())
+
+  // Functions in the fmt package call the String method to ask an object
+  // for a printable representation of itself.
+  fmt.Println(p)
+  fmt.Println(i)
+
+  learnVariadicParams("great", "learning", "here!")
+
+}
+
+// Functions can have variadic parameters.
+func learnVariadicParams(myStrings ...interface{}) {
+  // Iterate each value of the variadic.
+  // The underbar here is ignoring the index argument of the array.
+  for _, param := range myStrings {
+    fmt.Println("param:", param)
+  }
+  // Pass variadic value as a variadic parameter.
+  fmt.Println("params:", fmt.Sprintln(myStrings...))
+  learnErrorHandling()
+}
+
+func learnErrorHandling() {
+  // ", ok" idiom used to tell if something worked or not.
+  m := map[int]string{3: "three", 4: "four"}
+  if x, ok := m[1]; !ok {// ok will be false because 1 is not in the map.
+    fmt.Println("no one there")
+  } else {
+    fmt.Print(x) // x would be the value, if it were in the map.
+  }
+  // An error value communicates not just "ok" but more about the problem.
+  if _, err := strconv.Atoi("non-int"); err != nil { // _ discards value
+    // prints 'strconv.ParseInt: parsing "non-int": invalid syntax'
+    fmt.Println(err)
+  }
+  // We'll revisit interfaces a little later. Meanwhile,
+  learnConcurrency()
+}
+
+// c is a channel, a concurrency-safe communication object.
+func inc(i int, c chan int) {
+  c <- i + 1 // <- is the "send" operator when a channel appears on the left.
+}
